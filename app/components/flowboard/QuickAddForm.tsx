@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
-import { CATEGORIES } from './constants'
-import type { Category, Task } from './types'
+import { CATEGORIES, PRIORITIES } from './constants'
+import type { Category, Task, Priority } from './types'
 
 export default function QuickAddForm({
   onAdd
@@ -12,6 +12,8 @@ export default function QuickAddForm({
   const [title, setTitle] = useState('')
   const [notes, setNotes] = useState('')
   const [category, setCategory] = useState<Category>('Work')
+  const [priority, setPriority] = useState<Priority>('medium')
+  const [dueDate, setDueDate] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,11 +23,16 @@ export default function QuickAddForm({
       title: title.trim(),
       notes: notes.trim() || undefined,
       category,
-      status: 'todo'
+      status: 'todo',
+      priority,
+      dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
+      createdAt: new Date().toISOString()
     })
 
     setTitle('')
     setNotes('')
+    setPriority('medium')
+    setDueDate('')
     setIsExpanded(false)
   }
 
@@ -59,7 +66,7 @@ export default function QuickAddForm({
               rows={2}
               className="w-full px-3 py-2 border border-slate-600 bg-slate-700 text-white placeholder-slate-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
             />
-            <div className="flex gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Category)}
@@ -69,9 +76,32 @@ export default function QuickAddForm({
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value as Priority)}
+                className="px-3 py-2 border border-slate-600 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              >
+                {PRIORITIES.map(p => (
+                  <option key={p.key} value={p.key}>{p.label}</option>
+                ))}
+              </select>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                placeholder="Due date"
+                className="px-3 py-2 border border-slate-600 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+            </div>
+            <div className="flex justify-end">
               <button
                 type="button"
-                onClick={() => setIsExpanded(false)}
+                onClick={() => {
+                  setIsExpanded(false)
+                  setNotes('')
+                  setPriority('medium')
+                  setDueDate('')
+                }}
                 className="px-3 py-2 text-slate-400 hover:text-slate-200 transition-colors duration-200"
               >
                 Cancel

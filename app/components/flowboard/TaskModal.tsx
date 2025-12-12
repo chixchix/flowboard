@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react'
 import Badge from './Badge'
-import { CATEGORIES, STATUSES } from './constants'
+import { CATEGORIES, STATUSES, PRIORITIES } from './constants'
 import { getCategoryColor } from './utils'
-import type { Task, TaskStatus, Category } from './types'
+import type { Task, TaskStatus, Category, Priority } from './types'
 import Modal from './Modal'
 
 type Props = {
@@ -13,6 +13,8 @@ type Props = {
   onClose: () => void
   onSave: (task: Task) => void
   onDelete: (taskId: string) => void
+  onArchive?: (taskId: string) => void
+  onUnarchive?: (taskId: string) => void
 }
 
 export default function TaskModal({
@@ -20,7 +22,9 @@ export default function TaskModal({
   isOpen,
   onClose,
   onSave,
-  onDelete
+  onDelete,
+  onArchive,
+  onUnarchive
 }: Props) {
   const [editedTask, setEditedTask] = useState<Task | null>(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -44,6 +48,16 @@ export default function TaskModal({
       onDelete(task.id)
       onClose()
     }
+  }
+
+  const handleArchive = () => {
+    if (!task) return
+    if (task.archived && onUnarchive) {
+      onUnarchive(task.id)
+    } else if (!task.archived && onArchive) {
+      onArchive(task.id)
+    }
+    onClose()
   }
 
   // ──────────────────────────────────────────────────────────────────────────────
@@ -121,6 +135,14 @@ export default function TaskModal({
               Cancel
             </button>
           </>
+        )}
+        {(onArchive || onUnarchive) && (
+          <button
+            onClick={handleArchive}
+            className="px-3 py-1.5 text-sm rounded-md text-slate-300 hover:text-white hover:bg-slate-700/40 ring-1 ring-inset ring-slate-600/40 transition"
+          >
+            {task.archived ? 'Unarchive' : 'Archive'}
+          </button>
         )}
         <button
           onClick={handleDelete}
@@ -217,6 +239,53 @@ export default function TaskModal({
               <Badge className="bg-slate-800 text-slate-200 border-slate-600">
                 {STATUSES.find((s) => s.key === task.status)?.label}
               </Badge>
+            )}
+          </div>
+
+          {/* Priority */}
+          <div className="rounded-xl border border-slate-700/60 bg-slate-800/50 p-4">
+            <label className="block text-xs font-semibold tracking-wide text-slate-400 uppercase mb-1.5">
+              Priority
+            </label>
+            {isEditing ? (
+              <select
+                value={editedTask!.priority || 'medium'}
+                onChange={(e) =>
+                  setEditedTask({ ...editedTask!, priority: e.target.value as Priority })
+                }
+                className="w-full px-3 py-2 rounded-lg bg-slate-900 text-slate-100 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {PRIORITIES.map((priority) => (
+                  <option key={priority.key} value={priority.key}>
+                    {priority.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <Badge className={PRIORITIES.find(p => p.key === task.priority)?.color || 'bg-slate-600 text-slate-200'}>
+                {PRIORITIES.find(p => p.key === task.priority)?.label || 'None'}
+              </Badge>
+            )}
+          </div>
+
+          {/* Due Date */}
+          <div className="rounded-xl border border-slate-700/60 bg-slate-800/50 p-4">
+            <label className="block text-xs font-semibold tracking-wide text-slate-400 uppercase mb-1.5">
+              Due Date
+            </label>
+            {isEditing ? (
+              <input
+                type="date"
+                value={editedTask!.dueDate ? editedTask!.dueDate.split('T')[0] : ''}
+                onChange={(e) =>
+                  setEditedTask({ ...editedTask!, dueDate: e.target.value ? new Date(e.target.value).toISOString() : undefined })
+                }
+                className="w-full px-3 py-2 rounded-lg bg-slate-900 text-slate-100 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            ) : (
+              <p className="text-slate-300">
+                {task.dueDate ? new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No due date'}
+              </p>
             )}
           </div>
         </section>
