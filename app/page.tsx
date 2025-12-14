@@ -16,9 +16,9 @@ import { generateId } from './components/flowboard/utils'
 import type { Task, TaskStatus, Category } from './components/flowboard/types'
 
 const seedTasks: Task[] = [
-  { id: '1', title: 'Design system review', notes: 'Review palette & typography.', category: 'Work', status: 'todo', priority: 'high', createdAt: new Date().toISOString(), dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString() },
+  { id: '1', title: 'Design system review', notes: 'Review palette & typography.', category: 'Work', status: 'todo', priority: 'high', createdAt: new Date().toISOString(), dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] },
   { id: '2', title: 'Weekly team sync', notes: 'Prep agenda: progress + blockers.', category: 'Work', status: 'next', priority: 'medium', createdAt: new Date().toISOString() },
-  { id: '3', title: 'Fix authentication bug', notes: 'Mobile login issue.', category: 'Work', status: 'inprogress', priority: 'critical', createdAt: new Date().toISOString(), dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString() },
+  { id: '3', title: 'Fix authentication bug', notes: 'Mobile login issue.', category: 'Work', status: 'inprogress', priority: 'critical', createdAt: new Date().toISOString(), dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] },
   { id: '4', title: 'Grocery shopping', category: 'Personal', status: 'done', priority: 'low', createdAt: new Date().toISOString() },
   { id: '5', title: 'Learn TypeScript generics', notes: 'Deep dive into advanced TypeScript patterns', category: 'Ideas', status: 'todo', priority: 'medium', createdAt: new Date().toISOString() }
 ]

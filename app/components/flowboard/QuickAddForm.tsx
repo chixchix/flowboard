@@ -25,7 +25,7 @@ export default function QuickAddForm({
       category,
       status: 'todo',
       priority,
-      dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
+      dueDate: dueDate || undefined,
       createdAt: new Date().toISOString()
     })
 

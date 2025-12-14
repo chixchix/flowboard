@@ -278,7 +278,7 @@ export default function TaskModal({
                 type="date"
                 value={editedTask!.dueDate ? editedTask!.dueDate.split('T')[0] : ''}
                 onChange={(e) =>
-                  setEditedTask({ ...editedTask!, dueDate: e.target.value ? new Date(e.target.value).toISOString() : undefined })
+                  setEditedTask({ ...editedTask!, dueDate: e.target.value || undefined })
                 }
                 className="w-full px-3 py-2 rounded-lg bg-slate-900 text-slate-100 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -287,6 +287,16 @@ export default function TaskModal({
                 {task.dueDate ? new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No due date'}
               </p>
             )}
+          </div>
+
+          {/* Created At */}
+          <div className="rounded-xl border border-slate-700/60 bg-slate-800/50 p-4">
+            <label className="block text-xs font-semibold tracking-wide text-slate-400 uppercase mb-1.5">
+              Date Created
+            </label>
+            <p className="text-slate-300">
+              {new Date(task.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </p>
           </div>
         </section>
       </div>
