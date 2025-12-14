@@ -61,7 +61,7 @@ export default function FiltersBar({
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as SortOption)}
-          className="bg-transparent focus:outline-none"
+          className="bg-slate-700 text-white focus:outline-none"
         >
           <option value="createdAt">Date Created</option>
           <option value="priority">Priority</option>
