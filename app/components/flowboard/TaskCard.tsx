@@ -23,6 +23,11 @@ export default function TaskCard({
     
     // Create a custom drag image
     const dragImage = e.currentTarget.cloneNode(true) as HTMLElement
+    const originalElement = e.currentTarget as HTMLElement
+    dragImage.style.position = 'absolute'
+    dragImage.style.top = '-9999px'
+    dragImage.style.width = `${originalElement.offsetWidth}px`
+    dragImage.style.height = `${originalElement.offsetHeight}px`
     dragImage.style.opacity = '0.5'
     dragImage.style.transform = 'rotate(2deg)'
     document.body.appendChild(dragImage)
