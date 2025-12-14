@@ -54,6 +54,11 @@ export default function TaskCard({
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
+  const formatCreatedDate = (dateString: string) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  }
+
   return (
     <div
       draggable
@@ -94,6 +99,13 @@ export default function TaskCard({
           ))}
         </select>
       </div>
+
+      
+      {task.createdAt && (
+        <p className="text-xs text-slate-500 mb-2">
+          Created {formatCreatedDate(task.createdAt)}
+        </p>
+      )}
 
       {task.notes && (
         <p className="text-xs text-slate-400 mb-2 line-clamp-2">{task.notes}</p>
